@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#Установка logstash
+cd /home/
+
+rpm -i logstash_7.17.3_x86_64-224190-392536.rpm
+
+# logstash config
+cd /home/
+git clone git@github.com:AleksandrMalinovskiy/logging.git
+
+rm /etc/logstash/logstash.yml
+mv /home/logging/logstash.yml  /etc/logstash/
+mv /home/logging/logstash-nginx-es.conf /etc/logstash/conf.d/
+
+systemctl start logstash
+
+systemctl status logstash
+
+ss -ntlp
+
+
+sudo yum clean all
+
+##################################################################
+#Установка elasticsearch
+rpm -i elasticsearch_7.17.3_x86_64-224190-ec3fa5.rpm
+
+
+# Запускаем сервис elasticsearch
+sudo systemctl enable --now elasticsearch.service
+
+sudo systemctl enable --now logstash
+
+systemctl status elasticsearch
+ss -ntlp
+
+# Устанавливаем лимиты памяти для виртуальной машины Java
+cat > /etc/elasticsearch/jvm.options.d/jvm.options <<EOF
+-Xms1g
+-Xmx1g
+EOF
+
+########################################################################
+
+#Установка kibana
+rpm -i kibana_7.17.3_x86_64-224190-3badd3.rpm
+
+# Установка kibana
+
+rm /etc/kibana/kibana.yml
+mv /home/logging/kibana.yml /etc/kibana/
+sudo systemctl enable --now kibana
+
+sudo firewall-cmd --add-port=5601/tcp --permanent
+sudo firewall-cmd --reload
+
+systemctl status kibana
+
+ss -ntlp
+
+###########################################################################
+
+#Установка filebeat
+rpm -i filebeat_7.17.3_x86_64-224190-59ccad.rpm
+
+#Filebeat config
+
+rm /etc/filebeat/filebeat.yml
+mv /home/logging/filebeat.yml  /etc/filebeat/
+
+
+systemctl enable filebeat
+systemctl restart filebeat
+systemctl status filebeat
+ss -ntlp
+
+
+systemctl status elasticsearch
+systemctl status kibana
+systemctl status logstash
+systemctl status filebeat
+
+
+# Ходим по 80 порту, собираем логи nginx
+
+# Заходим на панель
+#http://192.168.0.141:5601/app/home#/
+
+
+

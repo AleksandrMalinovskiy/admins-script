@@ -1,0 +1,74 @@
+# Выясняем временный пароль
+grep "A temporary password" /var/log/mysqld.log
+
+# Запускаем скрипт безопасности для MySQL
+mysql_secure_installation
+
+# Заходим с паролем
+mysql -uroot -p
+
+# Тип бинлога
+show variables like '%binlog%';
+
+# Найти server_id
+SELECT @@server_id;
+
+
+#####################################################
+# На Мастере
+#####################################################
+
+# Создаём пользователя для реплики
+CREATE USER repl@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'Project2022#';
+
+# Даём ему права на репликацию
+GRANT REPLICATION SLAVE ON *.* TO repl@'%';
+
+# Смотрим пользователей
+SELECT User, Host FROM mysql.user;
+
+# Смотрим статус Мастера
+SHOW MASTER STATUS;
+
+######################################################
+# На Слейве
+######################################################
+
+# Отключаем firewalld
+systemctl stop firewalld
+systemctl disable firewalld
+
+# Смотрим статус Слейва
+SHOW MASTER STATUS;
+sudo nano /etc/my.cnf
+
+server_id = 2
+
+systemctl restart mysqld
+
+SHOW GLOBAL VARIABLES LIKE 'caching_sha2_password_public_key_path';
+SHOW STATUS LIKE 'Caching_sha2_password_rsa_public_key'\G
+
+# необходимо получить публичный ключ
+STOP SLAVE;
+CHANGE MASTER TO MASTER_HOST='192.168.0.10', MASTER_USER='repl', MASTER_PASSWORD='oTUSlave#2020', MASTER_LOG_FILE='binlog.000005', MASTER_LOG_POS=688, GET_MASTER_PUBLIC_KEY = 1;
+START SLAVE;
+show slave status\G
+
+# https://dev.mysql.com/doc/refman/8.0/en/replica-logs-relaylog.html
+# можем настроить наш relay.log
+show variables like '%relay%';
+
+# посмотрим статусы репликации
+use performance_schema;
+show tables like '%replic%';
+show variables like '%log_bin%';
+show variables like '%binlog%';
+show variables like '%read%';
+
+# рекомендуется включать для слейва, иначе на слейве тоже можем вносить изменения
+# /etc/my.cnf
+innodb_read_only = 1
+
+
+

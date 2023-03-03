@@ -1,0 +1,16 @@
+#!/bin/bash
+
+directory="/root/Mysql/backup/"
+fdate=`date +%Y-%m-%d`
+pass="Testpass1$"
+mysql -uroot -p$pass -e "STOP SLAVE;"
+for nameBD in $(mysql -uroot -p$pass -e "show databases;") ;
+do
+if mkdir -p $directory/$fdate/$nameBD ;
+then
+for nameT in $(mysql -uroot -p$pass $nameBD -e "show tables;") ;
+do
+mysqldump -u root -p$pass $nameBD $nameT | gzip > $directory/$fdate/$nameBD/$nameT.sql.gz ;
+done
+fi
+done

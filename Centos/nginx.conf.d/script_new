@@ -1,0 +1,13 @@
+#!/bin/bash
+one=$(git pull)
+if 
+	[ "$one" = "Already up-to-date." ];
+then	
+	echo "Latest version"
+elif 
+	[ "$one" != "Already up-to-date." ];
+then
+	systemctl reload nginx
+	echo "Latest version loaded"
+fi	
+ 

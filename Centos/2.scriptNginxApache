@@ -1,0 +1,116 @@
+#!/bin/bash
+#Получение ssh ключа
+#ssh-keygen
+#cat ~/.ssh/id_rsa.pub
+#Установка Git
+#yum install git
+#cd /home/
+#git clone git@github.com:AleksandrMalinovskiy/script.git
+#Запуск скрипта 
+
+# Отключаем SELinux
+setenforce 0
+
+# Отключаем firewalld
+systemctl stop firewalld
+systemctl disable firewalld
+
+# Установка репозитория EPEL
+yum install epel-release
+
+# Установка Nginx
+yum install nginx
+
+#Удаление папки conf.d 
+rmdir /etc/nginx/conf.d/
+
+rm /etc/nginx/nginx.conf
+
+#Выгрузка конфигов с GitHub
+cd /etc/nginx/ 
+
+git clone git@github.com:AleksandrMalinovskiy/nginx.conf.d.git
+
+mv /etc/nginx/nginx.conf.d/nginx.conf /etc/nginx/
+
+# Запуск Nginx
+systemctl start nginx
+ss -ntlp
+
+echo "Выполнено:" 
+echo "firewalld отключен" 
+echo "selinux отключен" 
+echo "nginx установлен, конфиги проброшены" 
+echo "_"
+
+read -p "Продолжить?(y/n)" r
+
+if
+	[ "$r" = y ];
+then
+
+# Установка Apache
+yum install httpd
+
+ #Удаление конфигов апача
+rm -rf /etc/httpd/conf.d/
+rm -rf /etc/httpd/conf/
+
+#Выгрузка конфигов апача 
+cd /etc/httpd/
+
+git clone git@github.com:AleksandrMalinovskiy/conf.git
+git clone git@github.com:AleksandrMalinovskiy/conf.d.git
+
+# Запуск Apache
+systemctl start httpd
+
+# Проверка статуса
+systemctl status httpd
+systemctl status nginx
+ss -ntlp
+
+# Автозапуск Nginx
+systemctl enable nginx
+
+# Автозапуск Apache
+systemctl enable httpd
+
+#Создаем файлы для наглядности проверки апача
+
+cd /var/www/
+mkdir html1
+mkdir html2
+
+cd /var/www/html/
+
+echo "<h1> Welcome 8080 </h1>" > index.html
+
+cd /var/www/html1/
+
+echo "<h1> Welcome 8081 </h1>" > index.html
+
+cd /var/www/html2/
+
+echo "<h1> Welcome 8082 </h1>" > index.html
+
+#Проверяем балансировку
+
+curl localhost
+curl localhost
+curl localhost              
+             
+elif
+	[ "$r" = n ];
+then
+	echo "ERROR"
+	exit
+fi
+
+
+
+
+
+
+
+
