@@ -37,7 +37,7 @@ then
 elif
     [ "$?" -eq 0 ]
 #4
-    echo "Бэкап директории bookmaker снят" && echo "$(date) Бэкап директории bookmaker снят" >> $log
+    echo "Бэкап директории bookmaker снят" && echo "$fdate Бэкап директории bookmaker снят" >> $log
 then
 #5
     ssh root@$ipprodapp "rm -r /srv/bakup-bookmaker-dir/bookmaker && rm /srv/bakup-bookmaker-dir/bookmaker_$fdate.gz"
