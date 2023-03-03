@@ -35,3 +35,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 #Скрипт проверки наличия бэкапа БД 
 20 * * * *   root    /bin/bash  /home/script/script-exemination-bakup/script-examination-file.sh
 50 * * * *   root    /bin/bash  /home/script/script-exemination-bakup/script-examination-file2.sh
+#Скрипт снятия дампа директории bookmaker/ и проверка наличия дампа 
+0 0 * * * *  root    /bin/bash  /home/script/script-bakup-bookmaker-dir/script-bakup-bookmaker-dir.sh
+30 0 * * * * root    /bin/bash  /home/script/script-bakup-bookmaker-dir/script-bakup-bookmaker-dir-file.sh
