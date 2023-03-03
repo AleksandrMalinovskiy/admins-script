@@ -1,4 +1,18 @@
-[Директория: /home/script/script-clear/](/script-clear/)
+[Директория: script-bakup-bookmaker-dir ](/script-bakup-bookmaker-dir/)
+
+[Скрипт: script-bakup-bookmaker-dir-file.sh](/script-bakup-bookmaker-dir/script-bakup-bookmaker-dir-file.sh)
+
+    Описание: Проверка наличие бэкапа за сутки 
+
+    Время выполнения: В 00:30 каждый день
+
+[Скрипт: script-bakup-bookmaker-dir.sh](/script-bakup-bookmaker-dir/script-bakup-bookmaker-dir.sh)
+
+    Описание: Скрипт снятия бэкапа директории bookmaker/
+
+    Время выполнения: В 00:00 каждый день
+____
+[Директория: script-clear/](/script-clear/)
 
 [Скрипт: clear.sh](/script-clear/clear.sh)
 
@@ -6,7 +20,7 @@
 
     Время выполнения: В 00:00 каждое воскресенье
 ______
-[Директория: /home/script/script-dump-stage/](/script-dump-stage/)
+[Директория: script-dump-stage/](/script-dump-stage/)
 
 [Скрипт: script-dump-stage.sh](/script-dump-stage/script-dump-stage.sh)
 
@@ -14,7 +28,7 @@ ______
 
     Время выполнения: Кроном не выполняется. Запуск руками
 _______
-[Директория: /home/script/script-exemination-bakup/](/script-exemination-bakup/)
+[Директория: script-exemination-bakup/](/script-exemination-bakup/)
 
 [Скрипт:  script-examination-dump.sh](/script-exemination-bakup/script-examination-dump.sh)
 
@@ -53,7 +67,7 @@ _______
     Время выполнения: Каждый час в 55 минут
 
 ______
-[Директория: /home/script/script-keitaro-dump/](/script-keitaro-dump/)
+[Директория: /script-keitaro-dump/](/script-keitaro-dump/)
 
 [Скрипт: script-keitaro-dump.sh](/script-keitaro-dump/script-keitaro-dump.sh)
 
@@ -62,7 +76,7 @@ ______
     Время выполнения: 1 и 15 числа каждого месяца
 
 ____
-[Директория: /home/script/script-status-patroni/](/script-status-patroni/)
+[Директория: /script-status-patroni/](/script-status-patroni/)
 
 [Скрипт: status-patroni1.sh](/script-status-patroni/status-patroni1.sh)
 
@@ -88,6 +102,10 @@ ____
     ├── script_clear - директория для логов скрипта на очистку места на серверах
 
     │    └── script-clear - лог файл скрипта на очистку места на серверах
+
+    ├── script-bakup-bookmaker-dir - директория для логов скрипта по снятию дампа директории bookmaker/
+
+    │    └──  log-script-bakup-bookmaker-dir - лог файл скрипта по снятию дампа директории bookmaker/ и скрипта проверки наличия дампа
 
     └── script-examination-dump - директория для логов скрипта проверки снятого дампа
 
